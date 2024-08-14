@@ -88,10 +88,11 @@ for (const route of routes) {
 app.use(errorHandler)
 
 const main = async () => {
+    console.log(config)
     //Inicializar mongo y prender servidor
 
     await mongoose.connect(config.MONGO_URI,{
-        dbName: 'ecommerce'
+        dbName: config.DBNAME
     })
 
     const httpServer = app.listen(8080, () => {
