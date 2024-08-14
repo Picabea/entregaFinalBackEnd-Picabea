@@ -8,5 +8,6 @@ module.exports = {
     appId: process.env.APPID,
     clientID: process.env.CLIENTID,
     clientSecret: process.env.CLIENTSECRET,
-    callBackURL: process.env.CALLBACKURL
+    callBackURL: process.env.CALLBACKURL,
+    DBNAME: process.env.DBNAME
 }
