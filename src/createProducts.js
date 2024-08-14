@@ -1,4 +1,3 @@
-const { connectToDB, closeConnection } = require('./connection')
 const { faker } = require('@faker-js/faker')
 const Product = require('./dao/mongo/models/product.model')
 
@@ -26,7 +25,6 @@ const mockingProducts = async () => {
             }
             
             let result = await Product.create(product)
-            console.log(result)
     }
     console.log('Database has been seeded!')
 

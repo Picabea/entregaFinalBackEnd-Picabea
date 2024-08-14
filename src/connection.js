@@ -1,8 +1,9 @@
 const mongoose = require('mongoose')
+const config = require('./config.js')
 
 module.exports = {
     async connectToDB(dbName) {
-        await mongoose.connect('mongodb://127.0.0.1:27017', {
+        await mongoose.connect(config.MONGO_URI, {
             dbName
         })
     },
