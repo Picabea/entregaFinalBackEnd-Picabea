@@ -18,7 +18,7 @@
     <a href={{response.nextLink}}>Pagina Siguiente</a>
     {{/if}}
 
-    <form action="/api/carts/{{cid}}/purchase" method="post" enctype="application/x-www-form-urlencoded">
+    <form action="../../pay" method="get" enctype="application/x-www-form-urlencoded">
         <button id="comprar" type="submit">Comprar</button>
     </form>
     {{#if isPremium}}
