@@ -1,0 +1,159 @@
+paths:
+  /api/users/premium/{uid}:
+    get:
+      summary: Actualiza al usuario a Premium si se cumplieron los requisitos
+      parameters:
+        - name: uid
+          in: path
+          required: true
+          description: ID del usuario a actualizar
+          schema:
+            $type: string
+      tags: 
+        - Users
+      responses: 
+        "200":
+          description: El usuario fue actualizado a premium correctamente
+          content: 
+            application/json:
+              schema:
+                type: object
+                $ref: "#components/schemas/User"
+        "403":
+          description: La documentacion no esta completa
+        "500":
+          description: Error interno o desconocido
+  /api/users/{uid}/documents:
+    post:
+      summary: Se le envian los documentos y se encarga de guardarlos y actualizar el estado del usuario
+      parameters:
+        - name: uid
+          in: path
+          required: true
+          description: ID del usuario a actualizar
+          schema:
+            $type: string
+      tags:
+        - Users
+      responses:
+        "200":
+          description: actualizacion exitosa
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id: 
+                    type: boolean
+                    description: ID subido true o false
+                  dom:
+                    type: boolean
+                    description: Comprobante de domicilio subido true o false
+                  account:
+                    type: boolean
+                    description: Comprobante de estado de cuenta subido true o false
+        "500":
+          description: Error interno o desconocido
+  /api/users/uploadFiles:
+    get:
+      summary: Renderiza una vista para que el usuario pueda subir los documentos
+      tags:
+        - Users
+      responses:
+        "200":
+          description: Se renderizo correctamente
+        "500":
+          description: Error interno o desconocido
+  /api/users/getusers:
+    get:
+      summary: Devuelve una lista de todos los usuarios
+      tags:
+        - Users
+      responses:
+        "200": 
+          description: Vista renderizada con los usuarios correctamente
+        "500": 
+          description: Error interno o desconocido
+  /api/users/:
+    delete:
+      summary: Elimina a todos los usuarios que esten inactivos hace mas de dos dias
+      tags:
+        - Users
+      responses: 
+        "200":
+          description: Usuarios eliminados correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success: 
+                    type: boolean
+                    description: Operacion exitosa true
+                  payload:
+                    type: Array
+                    description: Contiene una lista con los emails eliminados
+  /api/users/manageuser/{uid}:
+    get:
+      summary: renderiza una vista donde gestionar a un usuario
+      tags:
+        - Users
+      parameters:
+        - name: uid
+          in: path
+          required: true
+          description: ID del usuario a actualizar
+          schema:
+            $type: string
+      responses:
+        "200":
+          description: Vista renderizada correctamente
+        "400":
+          description: No se encontro ningun usuario con el ID
+        "500":
+          description: Error interno o desconocido
+
+components:
+  schemas:
+    User:
+      type: object
+      properties: 
+        _id: 
+          type: string
+          description: ID auto generado por mongo
+        firstName: 
+          type: String
+          description: Nombre del usuario
+        lastName:
+          type: string
+          description: Apellido del usuario
+        age:
+          type: number
+          description: Edad del usuario
+        email:
+          type: string
+          description: EMail del usuario
+        password:
+          type: string
+          description: Contraseña hasheada del usuario
+        role: 
+          type: string
+          description: Rol del usuario, puede ser "user", "premium" o "admin"
+        cart:
+          type: string
+          description: ID que referencia a un Cart de Mongo
+        documents:
+          type: array
+          description: Contiene la ruta a los documentos del usuario
+        last_connection:
+          type: date
+          description: Fecha de ultima conexion del usuario
+        id_loaded:
+          type: boolean
+          description: Indica si el usuario subio su identificacion o no
+        dom_loaded: 
+          type: boolean
+          description: Indica si el usuario subio un comprobante de domicilio o no
+        account_loaded: 
+          type: boolean
+          description: Indica si el usuario subio un comprobante de estado de cuenta o no

@@ -1,0 +1,75 @@
+paths:
+  /:
+    get:
+      summary: Renderiza la pagina home
+      tags:
+        - Views
+      responses:
+        "200": 
+          description: Renderiza la pagina
+        "500": 
+          description: Error interno o desconocido
+  /login:
+    get:
+      summary: renderiza la vista para loguearse
+      tags:
+        - Views
+      responses: 
+        "200": 
+          description: Renderiza la pagina
+        "500": 
+          description: Error interno o desconocido
+  /register:
+    get:
+      summary: renderiza la vista para registrarse
+      tags:
+        - Views
+      responses: 
+        "200": 
+          description: Renderiza la pagina
+        "500": 
+          description: Error interno o desconocido
+  /profile:
+    get:
+      summary: Muestra datos del perfil
+      tags: 
+        - Views
+      responses:
+        "200": 
+          description: Renderiza la pagina
+        "500": 
+          description: Error interno o desconocido
+  /loggerTest:
+    get:
+      summary: Muestra en consola la funcionalidad de Logger
+      tags:
+        - Views
+      responses:
+        "200":
+          description: La muestra se completo
+        "500":
+          description: Error interno o desconocido
+  /createpremiumproduct:
+    get:
+      summary: Muestra una vista para que los usuarios premium puedan crear sus productos
+      tags:
+        - Views
+        - Products
+      responses: 
+        "200": 
+          description: Renderiza la pagina
+        "500": 
+          description: Error interno o desconocido
+  /pay:
+    get:
+      summary: Renderiza una vista para que el usuario suba los "datos" de la tarjeta
+      tags:
+        - Views
+        - Carts
+      responses:
+        "200": 
+          description: Renderiza la pagina
+        "500": 
+          description: Error interno o desconocido
+      
+    

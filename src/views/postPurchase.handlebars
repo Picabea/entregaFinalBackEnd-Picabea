@@ -1,0 +1,8 @@
+<h1>Codigo de su compra: {{result.code}}</h1>
+
+
+<b>Productos que no se pudieron comprar:</b>
+{{#each unboughtResponse}}
+    <i>{{this.title}}</i>
+    <p>{{this.description}}</p>
+{{/each}}

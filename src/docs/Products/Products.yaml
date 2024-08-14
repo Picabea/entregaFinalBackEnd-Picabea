@@ -1,0 +1,233 @@
+paths:
+  /api/products:
+    get:
+      summary: Renderiza algunos datos del usuario actual y el listado de productos
+      tags: 
+        - Products
+      responses:
+        "200":
+          description: "Operacion exitosa"
+        "400": 
+          description: "Error por informacion invalida"
+        "500": 
+          description: "Error desconocido"
+    post:
+      summary: Crea un producto a partir de los datos enviados por el body
+      tags: 
+        - Products
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#components/requestBodies/createproduct"
+      responses: 
+        "200":
+          description: "Operacion exitosa"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  product:
+                    $ref: "#components/schemas/Product"
+        "400":
+          description: Invalid Data
+        "500": 
+          description: Error interno
+  /api/products/mockingProducts:
+    get: 
+      summary: Crea 100 productos inventados
+      tags: 
+        - Products
+      responses: 
+        "200": 
+          description: Operacion exitosa
+        "500":
+          description: Error interno
+  /api/products/{pid}:
+    get:
+      summary: Devuelve el producto con el id enviado
+      tags: 
+        - Products
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: ID del producto a devolver
+          schema:
+            $type: string
+      responses: 
+        "200":
+          description: "Operacion exitosa"
+          content:
+            application/json:
+              schema:
+                  type: object
+                  $ref: "#components/schemas/Product"
+        "400":
+          description: "Product not found or invalid ID"
+    delete:
+      summary: Elimina el producto con el ID enviado
+      tags:
+        - Products
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: ID del producto a devolver
+          schema:
+            $type: string
+      responses:
+        "200":
+          description: Operacion exitosa
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  acknowledged: 
+                    type: boolean
+                    description: Operacion realizada true or false
+                  deletedCount:
+                    type: number
+                    description: Numero de objetos eliminados
+        "400":
+          description: Error por informacion invalida
+        "500": 
+          description: Error interno
+    put:
+      summary: Actualiza la informacion de un producto, no es necesario mandar todos los campos del producto, unicamente los que seran modificados. Ademas el ID no puede ser modificado y el code debe ser unico
+      tags: 
+        - Products
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#components/requestBodies/updateproduct"
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: ID del producto a devolver
+          schema:
+            $type: string
+      responses:
+        "200":
+          description: Operacion exitosa
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  acknowledged: 
+                    type: boolean
+                    description: Operacion realizada true or false
+                  modifiedCount:
+                    type: number
+                    description: Numero de objetos actualizados
+        "400":
+          description: Error por informacion invalida
+        "500":
+          description: Error interno
+
+components:
+  schemas:
+    Product:
+      type: object
+      properties: 
+        _id:
+          type: string
+          description: ID auto generada por mongo
+        title:
+          type: string
+          description: Nombre del producto
+        description:
+          type: string
+          description: Descripcion breve del producto
+        price:
+          type: number
+          description: Precio
+        thumbnail:
+          type: string
+          description: Imagen del producto
+        code:
+          type: string
+          description: Codigo unico del producto
+        stock:
+          type: number
+          description: Stock del producto
+        status:
+          type: boolean
+          description: Producto activo o inactivo
+        category:
+          type: string
+          description: Categoria del producto
+      example:
+        _id: 660c3d464eb0ad95e8415901
+        title: Sprite Zero 300ml
+        description: Refresco burbujeante con sabor a lima-limón, sin calorías y sin azúcar.
+        price: 700
+        thumbnail: www.imagen.com/sprite-zero
+        code: s300
+        stock: 0
+        status: true
+        category: gaseosas
+  requestBodies:
+    createproduct:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Nombre del producto
+        description:
+          type: string
+          description: Descripcion breve del producto
+        price:
+          type: number
+          description: Precio
+        thumbnail:
+          type: string
+          description: Imagen del producto
+        code:
+          type: string
+          description: Codigo unico del producto
+        stock:
+          type: number
+          description: Stock del producto
+        category:
+          type: string
+          description: Categoria del producto
+      example:
+        title: Sprite Zero 300ml
+        description: Refresco burbujeante con sabor a lima-limón, sin calorías y sin azúcar.
+        price: 700
+        thumbnail: www.imagen.com/sprite-zero
+        code: s300
+        stock: 0
+        category: gaseosas
+    updateproduct:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Nombre del producto
+        description:
+          type: string
+          description: Descripcion breve del producto
+        price:
+          type: number
+          description: Precio
+        thumbnail:
+          type: string
+          description: Imagen del producto
+        code:
+          type: string
+          description: Codigo unico del producto
+        stock:
+          type: number
+          description: Stock del producto
+        category:
+          type: string
+          description: Categoria del producto

@@ -1,0 +1,22 @@
+<p>{{_id}}</p>
+
+{{#unless allLoaded}}
+    <form method="post" action="/api/users/{{_id}}/documents" enctype="multipart/form-data">
+        {{#unless id_loaded}}
+            <label >Identificacion</label>
+            <input type="file" name="id">
+        {{/unless}}
+        {{#unless dom_loaded}}
+            <label >Comprobante de domicilio</label>
+            <input type="file" name="dom">
+        {{/unless}}
+        {{#unless account_loaded}}
+            <label >Comprobante de estado de cuenta</label>
+            <input type="file" name="account">
+        {{/unless}}
+        <button type="submit">Enviar </button>
+    </form>
+{{/unless}}
+{{#if allLoaded}}
+    <h3>Todos los archivos estan cargados</h3>
+{{/if}}

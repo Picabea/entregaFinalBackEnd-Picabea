@@ -1,0 +1,30 @@
+<div id="products">
+    <h1>Bienvenido {{user.role}} {{user.firstName}} {{user.lastName}} de {{user.age}} año/s</h1>
+    <h2>Cuenta asociada a {{user.email}}</h2>
+
+    <p id="cart">{{cid}}</p>
+    {{#each response.payload}}
+        <h3>{{this.title}}</h3>
+        <p>{{this.description}}</p>
+        <p>Su codigo es {{this.code}}, vale ${{this.price}} y hay {{this.stock}} en stock</p>
+        <button id="button_{{this._id}}">Agregar al carrito</button>
+    {{/each}}
+
+    Pagina: {{response.page}}
+    {{#if response.hasPrevPage}}
+    <a href={{response.prevLink}}>Pagina Anterior</a>
+    {{/if}}
+    {{#if response.hasNextPage}}
+    <a href={{response.nextLink}}>Pagina Siguiente</a>
+    {{/if}}
+
+    <form action="/api/carts/{{cid}}/purchase" method="post" enctype="application/x-www-form-urlencoded">
+        <button id="comprar" type="submit">Comprar</button>
+    </form>
+    {{#if isPremium}}
+    <form action="/createPremiumProduct/" method="get" enctype="application/x-www-form-urlencoded">
+        <button id="comprar" type="submit">Crear producto</button>
+    </form>
+    {{/if}}
+</div>
+

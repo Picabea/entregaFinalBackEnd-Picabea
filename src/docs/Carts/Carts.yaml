@@ -1,0 +1,333 @@
+paths:
+  /api/carts/{cid}:
+    get:
+      summary: Devuelve el carrito con el ID enviado
+      tags: 
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: ID del carrito a devolver
+          schema: 
+            $type: string
+      responses:
+        "200": 
+          description: Operacion exitosa
+          content:
+            application/json:
+              schema: 
+                type: object
+                $ref: "#components/schemas/Cart"
+        "400":
+          description: Error por informacion invalida
+        "500": 
+          description: Error interno
+    delete:
+      summary: Elimina los productos del carrito, vale aclarar que en la respuesta si todo salio bien se mostrara el carrito sin ningun producto agregado.
+      tags: 
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: ID del carrito
+          schema: 
+            $type: string
+      responses:
+        "200":
+          description: Operacion exitosa
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#components/schemas/Cart'
+        "500":
+          description: Error desconocido o interno
+    put:
+      summary: Cambia los products del carrito indicado en el path al array mandado por body
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: ID del carrito
+          schema: 
+            $type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: 
+              $ref: '#components/requestBodies/updatecart'
+      responses:
+        "200":
+          description: operacion exitosa
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#components/schemas/Cart'
+        "500":
+          description: Error desconocido o interno
+  /api/carts:
+    post:
+      summary: Crea un carrito con la informacion del body, no es necesario enviar un body.
+      tags: 
+        - Carts
+      requestBody:
+        required: false
+        content: 
+          application/json:
+            schema:
+              $ref: "#components/requestBodies/createcart"
+      responses: 
+        "200":
+          description: Operacion exitosa
+          content: 
+            application/json:
+              schema:
+                type: object
+                $ref: '#components/schemas/Cart'
+        "500":
+          description: Error interno
+  /api/carts/{cid}/product/{pid}:
+    post: 
+      summary: Añade un producto al carrito
+      tags: 
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: ID del carrito a modificar
+          schema: 
+            $type: string
+        - name: pid
+          in: path
+          required: true
+          description: ID del producto a agregar al carrito
+          schema:
+            $type: string
+      requestBody:
+        required: true
+        content: 
+          application/json:
+            schema: 
+              type: object
+              $ref: '#components/requestBodies/addproducttocart'
+      responses:
+        "200":
+          description: Operacion exitosa
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  acknowledged: 
+                    type: boolean
+                    description: Operacion realizada true or false
+                  modifiedCount:
+                    type: number
+                    description: Numero de objetos actualizados
+        "500": 
+          description: Error interno
+    delete:
+      summary: Elimina un producto del carrito
+      tags: 
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: ID del carrito a modificar
+          schema: 
+            $type: string
+        - name: pid
+          in: path
+          required: true
+          description: ID del producto a eliminar
+          schema:
+            $type: string
+      responses:
+        "200":
+          description: Operacion exitosa
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#components/schemas/Cart'
+        "500":
+          description: Error desconocido o interno
+    put:
+      summary: Actualiza la cantidad del producto indicado del carrido indicado
+      tags:
+        - Carts
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: ID del carrito a modificar
+          schema: 
+            $type: string
+        - name: pid
+          in: path
+          required: true
+          description: ID del producto a eliminar
+          schema:
+            $type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/requestbodies/updateproductquantity'
+      responses:
+        "200":
+          description: operacion exitosa
+          content: 
+            application/json:
+              schema:
+                type: object
+                $ref: '#components/schemas/Cart'
+        "400":
+          description: Error por informacion invalida
+        "500":
+          description: Error interno
+
+  /api/carts/{cid}/purchase:
+    post: 
+      summary: Devuelve el ticket de compra y los productos que no pudieron ser comprados por falta de stock
+      tags:
+        - Carts
+        - Tickets
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          description: ID del carrito del cual se finalizara la compra
+          schema: 
+            $type: string
+      responses:
+        "200":
+          description: Operacion exitosa
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  ticket:
+                    type: object
+                    $ref: '#components/schemas/Ticket'
+                  unboughtResponse:
+                    type: array
+                    items:
+                      productId:
+                        type: string
+                        description: ID de los productos que no se pudieron comprar
+        "400": 
+          description: Error por total de la compra invalido (igual a 0), falta de productos en el carrito o fecha de vencimiento invalida
+        "402":
+          description: Error por medio de pago vencido
+        "500":
+          description: Error interno
+
+components:
+  schemas:
+    Cart:
+      type: object
+      properties: 
+        _id:
+          type: string
+          description: ID auto generada por mongo
+        products:
+          type: array
+          items:
+            type: object
+            properties:
+              productId:
+                type: string
+                description: ID del producto agregado al carrito
+              quantity:
+                type: number
+                description: Cantidad de veces que se agrego el producto al carrito
+      example:
+        _id: 6642d79f6cea95f41a017c62
+        products:
+          - productId: 661d44de7df08d796b02093a
+            quantity: 1
+          - productId: 660c3d464eb0ad95e8415901
+            quantity: 5
+    Ticket:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: ID autogenerado por mongo
+        code: 
+          type: string
+          description: Codigo que identifica al ticket creado de forma semialeatoria
+        purchase_dateTime:
+          type: string
+          format: date-time
+          description: Hora de realizacion de compra
+        amount: 
+          type: number
+          description: Monto total de la compra
+        purchaser: 
+          type: string
+          description: Identificador del comprador
+  requestBodies:
+    createcart:
+      type: object
+      properties:
+        products:
+          type: array
+          description: array con ID y cantidad de cada producto
+          items:
+            - productID: 
+                type: string
+                description: ID del producto al que referencia
+              quantity: 
+                type: number
+                description: Cantidad de productos en el carrito 
+      example:
+        _id: 6642d79f6cea95f41a017c62
+        products:
+          - productId: 661d44de7df08d796b02093a
+            quantity: 1
+          - productId: 660c3d464eb0ad95e8415901
+            quantity: 5
+    addproducttocart:
+      type: object
+      properties:
+        quantity:
+          type: number
+          description: cantidad de veces que ese producto esta en el carrito
+      example:
+        quantity: 2
+    updatecart:
+      type: array
+      description: Productos del carrito
+      items:
+        - productId:
+            type: string
+            description: ID del producto al que referencia
+          quantity: 
+            type: number
+            description: cantidad de veces que se agrego el producto al carrito
+      example:
+        - productId: 661d449ee337d941b6351d1e
+          quantity: 2
+        - productId: 661d44de7df08d796b020941
+          quantity: 5
+    updateproductquantity:
+      type: object
+      properties:
+        newquantity: 
+          type: number
+          description: Cantidad nueva de productos
+      example:
+        newquantity: 4
+

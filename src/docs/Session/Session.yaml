@@ -1,0 +1,173 @@
+paths:
+  /api/sessions/login:
+    post:
+      summary: Crea la Session del usuario mediante passport
+      tags:
+        - Session
+      responses:
+        "200": 
+          description: Se logueo y renderizo la vista correctamente
+        "302":
+          description: Redireccion por error
+        "500": 
+          description: Error interno o desconocido
+  /api/sessions/register:
+    post:
+      summary: Registra un usuario nuevo mediante Passport
+      tags:
+        - Session
+      responses:
+        "200": 
+          description: Usuario creado y redireccionado correctamente
+        "302":
+          description: Redireccion por error
+        "500":
+          description: Error interno o desconocido
+  /api/sessions/failRegister:
+    get:
+      summary: Pagina de redireccion en caso de que el registro falle
+      tags:
+        - Session
+      responses:
+        "200": 
+          description: Error registrando el usuario
+        "500":
+          description: Error interno o desconocido
+  /api/sessions/failLogin:
+    get:
+      summary: Pagina de redireccion en caso de que el login falle
+      tags:
+        - Session
+      responses:
+        "200": 
+          description: Error loguendo el usuario
+        "500":
+          description: Error interno o desconocido
+  /api/sessions/logout:
+    get:
+      summary: Cierra la sesion de un usuario
+      tags:
+        - Session
+      responses:
+        "302": 
+          description: Redireccion a Login
+        "500":
+          description: Error interno o desconocido
+  /api/sessions/current:
+    get:
+      summary: Muestra informacion relevante del usuario logueado
+      tags:
+        - Session
+      responses:
+        "200":
+          description: Vista renderizada correctamente
+        "400":
+          description: Error por email invalido
+        "500":
+          description: Error interno o desconocido
+  /api/sessions/restorePassword:
+    post:
+      summary: Restablece la contraseña del usuario
+      tags:
+        - Session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#components/requestBodies/restorePassword"
+      responses: 
+        "200": 
+          description: Exito restaurando la contraseña
+        "400": 
+          description: Error al restaurar la contraseña
+        "500": 
+          description: Error interno o desconocido
+  /api/sessions/userbyemail:
+    get:
+      summary: Devuelve el usuario con el email enviado en el body
+      tags:
+        - Session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#components/requestBodies/restorePassword"
+      responses:
+        "200":
+          description: Usuario devuelto 
+          content:
+            application/json:
+              schema:
+                  type: object
+                  $ref: "#components/schemas/User"
+        "500":
+          description: error interno o desconocido
+
+
+components:
+  schemas:
+    User:
+      type: object
+      properties: 
+        _id: 
+          type: string
+          description: ID auto generado por mongo
+        firstName: 
+          type: String
+          description: Nombre del usuario
+        lastName:
+          type: string
+          description: Apellido del usuario
+        age:
+          type: number
+          description: Edad del usuario
+        email:
+          type: string
+          description: EMail del usuario
+        password:
+          type: string
+          description: Contraseña hasheada del usuario
+        role: 
+          type: string
+          description: Rol del usuario, puede ser "user", "premium" o "admin"
+        cart:
+          type: string
+          description: ID que referencia a un Cart de Mongo
+        documents:
+          type: array
+          description: Contiene la ruta a los documentos del usuario
+        last_connection:
+          type: date
+          description: Fecha de ultima conexion del usuario
+        id_loaded:
+          type: boolean
+          description: Indica si el usuario subio su identificacion o no
+        dom_loaded: 
+          type: boolean
+          description: Indica si el usuario subio un comprobante de domicilio o no
+        account_loaded: 
+          type: boolean
+          description: Indica si el usuario subio un comprobante de estado de cuenta o no
+  requestBodies:
+    restorePassword:
+      type: object
+      properties:
+        email:
+          type: string
+          description: Email del usuario a restablecer la contraseña
+        newPassword:
+          type: string
+          description: nueva contraseña
+      example:
+        email: prueba@gmail.com
+        newPassword: contraseña123
+    userbyemail:
+      type: object
+      properties:
+        email:
+          type: string
+          description: email del usuario a encontrar
+      example: 
+        email: prueba@gmail.com

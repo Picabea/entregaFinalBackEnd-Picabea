@@ -1,0 +1,11 @@
+<div>
+    <p>{{user.firstName}}</p>
+    <p>{{user.age}}</p>
+    <p>{{user.role}}</p>
+    <div>
+        {{#each cart.products}}
+            <h3>{{this.productId.title}}</h3>
+            <p>{{this.productId.description}}</p>
+        {{/each}}
+    </div>
+</div>

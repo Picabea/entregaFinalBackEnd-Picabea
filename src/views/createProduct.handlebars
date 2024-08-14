@@ -1,0 +1,29 @@
+<div>
+    <form action="/api/products/" method="post" enctype="application/x-www-form-urlencoded">
+        <label for="_title">Title</label>
+        <input type="text" name="title" id="_name" />
+
+        <label for="_description">Description</label>
+        <input type="text" name="description" id="_l_name" />
+
+        <label for="_price">Price</label>
+        <input type="number" name="price" id="_price" />
+
+        <label for="_thumbnail">Thumbnail</label>
+        <input type="text" name="thumbnail" id="_thumbnail" />
+
+        <label for="_code">Code</label>
+        <input type="text" name="code" id="_code" />
+
+        <label for="_stock">Stock</label>
+        <input type="number" name="stock" id="_stock" />
+
+        <label for="_category">Category</label>
+        <input type="text" name="category" id="_category" />
+
+        <label for="_premium">Premium</label>
+        <input type="text" name="premium" id="_premium" value="{{uid}}">
+
+        <button type="submit">Crear</button>
+    </form>
+</div>
